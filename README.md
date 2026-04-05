@@ -26,7 +26,10 @@ English | [中文](https://github.com/SafeRL-Lab/nano-claude-code/blob/main/docs
 
 ---
 
+
+
 ## 🔥🔥🔥 News (Pacific Time)
+- 10:28 PM, Apr 04, 2026: **v3.05_fix03** — Added a native `SleepTimer` tool that lets the agent schedule background timers and autonomously wake itself up after a delay — no user prompt required. Paired with a `threading.Lock` to prevent output collisions when background and foreground calls overlap. Also includes cross-platform fixes: Windows ANSI color support, CRLF-aware Edit tool matching, an interactive numbered menu for `/load`, native Ollama streaming via `/api/chat`, and auto-capping `max_tokens` per provider to prevent API errors. 
 - 10:04 PM, Apr 04, 2026: **v3.05_fix** — Autosave + `/resume`: session is automatically saved to `mr_sessions/session_latest.json` on `/exit`, `/quit`, `Ctrl+C`, and `Ctrl+D`. Run `/resume` to restore the last session instantly, or `/resume <file>` to load a specific file from `mr_sessions/`, and better support for api and local Ollama models (specifically gemma4), along with Windows compatibility enhancements, session management UX improvements, and cross-platform reliability fixes for the Edit tool.
 - 00:41 AM, Apr 04, 2026: **v3.05** — Voice input (`voice/` package): `sounddevice` → `arecord` → SoX recording backends, `faster-whisper` → `openai-whisper` → OpenAI API STT backends. Smart keyterm extraction from git branch + project name + recent files passed as Whisper `initial_prompt` for coding-domain accuracy. `/voice`, `/voice status`, `/voice lang <code>` REPL commands. Works fully offline with no API key. 29 new tests (**~11.6K** lines of Python).
 - 10:29 PM, Apr 03, 2026: **v3.04** — Expanded tool coverage: `NotebookEdit` (edit Jupyter `.ipynb` cells — replace/insert/delete with full JSON round-trip) and `GetDiagnostics` (LSP-style diagnostics via pyright/mypy/flake8/tsc/shellcheck). Also fixed a pre-existing schema-index bug in `_register_builtins` by switching to name-based lookup (**~10.5K** lines of Python).
