@@ -6,15 +6,16 @@ English | [中文](https://github.com/SafeRL-Lab/nano-claude-code/blob/main/docs
   </a>
 
   
-<h1 align="center" style="font-size: 30px;"><strong><em>Nano Claude Code</em></strong>: A Fast, Easy-to-Use Python Reimplementation of Claude Code Supporting Any Model</h1>
+<h1 align="center"><strong>🤖 Nano Claude Code</strong></h1>
+<p align="center"><strong>A Fast, Easy-to-Use Python Reimplementation of Claude Code Supporting Any Model</strong></p>
+
 <p align="center">
-    <a href="https://github.com/chauncygu/collection-claude-code-source-code">The newest source of Claude Code</a>
+    <a href="https://github.com/chauncygu/collection-claude-code-source-code">✨ Newest Source</a>
     ·
-    <a href="https://github.com/SafeRL-Lab/nano-claude-code/issues">Issue</a>
-  ·
-    <a href="https://deepwiki.com/SafeRL-Lab/nano-claude-code">Brief Intro</a>
-  
-  </p>
+    <a href="https://github.com/SafeRL-Lab/nano-claude-code/issues">🐞 Issues</a>
+    ·
+    <a href="https://deepwiki.com/SafeRL-Lab/nano-claude-code">📖 Brief Intro</a>
+</p>
 </div>
 
  <div align=center>
@@ -28,19 +29,23 @@ English | [中文](https://github.com/SafeRL-Lab/nano-claude-code/blob/main/docs
 
 
 
-## 🔥🔥🔥 News (Pacific Time)
+## � News (Pacific Time)
 
+- **03:43 PM, Apr 05, 2026 (v3.05.5)**: 🧠 **Reasoning, Rendering, and Packaging Improvements**
+  - 📷 **Native Vision Support**: Local Ollama models (`llava`, `gemma4`, `llama3.2-vision`) now supported via `/image [prompt]`.
+  - 📋 **Multi-line Paste Detection**: Text is now submitted as a single turn rather than multiple queries.
+  - 🧠 **Enhanced Memory System**: Conflict detection, re-ranking by confidence × recency, and AI-driven consolidation.
+  - ⚡ **Ollama Reasoning**: Native `<think>` block streaming for `deepseek-r1`, `qwen3`, and `gemma4`.
+  - 🛠️ **Infrastructure**: Moved `sounddevice` to optional `voice` extra; fixed ANSI dim color resets.
 
-- 03:43 PM, Apr 05, 2026 (**v3.05.5**): **Reasoning, Rendering, and Packaging Improvements, Enhanced Memory System, Native vision support for local Ollama models**
-  - **Native vision support for local Ollama models** (`llava`, `gemma4`, `llama3.2-vision`): new `/image [prompt]` command captures the current clipboard image, encodes it to Base64, and attaches it to the next prompt. Also adds multi-line paste detection (`_read_input`) so pasted text is submitted as a single turn rather than multiple queries. Install Pillow with `pip install nano-claude-code[vision]`; Linux users also need `xclip` (`sudo apt install xclip`).
-  - **Enhanced Memory System** — added `confidence` / `source` / `last_used_at` / `conflict_group` metadata to every memory entry; conflict detection on `MemorySave` warns before overwriting; `MemorySearch` re-ranks results by `confidence × recency` (30-day decay) and updates `last_used_at` on hits; new `/memory consolidate` command runs a lightweight AI analysis of the current session and auto-saves up to 3 long-term insights (user preferences, feedback corrections, project decisions) at 0.8 confidence — never overwrites higher-confidence user memories.
-  - **Post-merge fixes** — removed a debug `debug_payload.json` file write that was firing on every OpenAI-compatible API call (left over from PR #11 development). Also fixed ANSI dim color not being reset after the thinking block ends, which caused subsequent text to appear dim in non-Rich terminals. Bumped `pyproject.toml` version to `3.05.4`, and moved `sounddevice` to the optional `voice` extra (`pip install nano-claude-code[voice]`).
-  - **Native Ollama reasoning + terminal rendering fix** — local reasoning models (`deepseek-r1`, `qwen3`, `gemma4`) now stream their `<think>` blocks to the terminal. Ollama exposes thoughts in `msg["thinking"]`, but nano-claude was previously dropping them; this is now fixed by yielding `ThinkingChunk` from the Ollama adapter. Also fixed a Windows CMD/PowerShell rendering issue where token-by-token ANSI dim resets caused thoughts to print vertically, and corrected `flush_response()` so it runs once at the end instead of on every thinking token. Enable with `/verbose` and `/thinking`.
-  - **uv support** — added `pyproject.toml`; install with `uv tool install .` to make the `nano_claude` command available globally from anywhere in an isolated environment, without manual PATH setup.
-- 00:41 PM, Apr 05, 2026: **v3.05.4** — Structured session history: on every exit, sessions are saved to `daily/YYYY-MM-DD/` (capped at `session_daily_limit`, default 5 per day) and appended to a master `history.json` (capped at `session_history_limit`, default 100). Each session file now includes `session_id` and `saved_at` metadata. `/load` groups sessions by date with time, ID, and turn-count display; supports multi-select (`1,2,3`) to merge sessions and `H` to load the full history with token-count confirmation. Both limits are configurable via `/config`.
-- 00:41 PM, Apr 05, 2026: **v3.05.3 fix session** — Structured session history: on every exit, sessions are saved to `daily/YYYY-MM-DD/` (capped at `session_daily_limit`, default 5 per day) and appended to a master `history.json` (capped at `session_history_limit`, default 100). Each session file now includes `session_id` and `saved_at` metadata. `/load` groups sessions by date with time, ID, and turn-count display; supports multi-select (`1,2,3`) to merge sessions and `H` to load the full history with token-count confirmation. Both limits are configurable via `/config`.
-- 09:34 AM, Apr 05, 2026: **v3.05.3** — Added GitHub Gist cloud sync: `/cloudsave setup <token>` to configure, `/cloudsave` to upload the current session to a private Gist, `/cloudsave auto on` to sync automatically on `/exit`, `/cloudsave list` to browse cloud sessions, and `/cloudsave load <id>` to restore from the cloud. Uses stdlib `urllib` — no new dependencies. Also added version number (e.g., `v3.05.2`) in the startup banner: The startup banner now displays the current version number (v3.05.2) in green, making it easy to identify which version is running at a glance.
-- 08:58 AM, Apr 05, 2026: **v3.05.2** — Introduced `/proactive [duration]` command: a background daemon thread watches for user inactivity and automatically wakes the agent up after the specified interval (e.g. `/proactive 5m`), enabling continuous monitoring loops without user intervention. `/proactive` with no args now shows current status; `/proactive off` disables it explicitly. Proactive polling state is stored in `config` (no module-level globals). Watcher exceptions are logged via `traceback` instead of silently swallowed. Also fixed duplicated output in Rich-enabled terminals by buffering text during streaming and rendering Markdown once via `rich.live.Live` — updates happen in-place for a true streaming Markdown experience. 
+- **00:41 PM, Apr 05, 2026 (v3.05.4)**: 📅 **Structured Session History**
+  - Sessions now auto-saved to dated directories; `/load` supports multi-select and merged history view.
+
+- **09:34 AM, Apr 05, 2026 (v3.05.3)**: ☁️ **GitHub Gist Cloud Sync**
+  - `/cloudsave` setup for seamless cross-machine session restoration.
+
+- **08:58 AM, Apr 05, 2026 (v3.05.2)**: 🕵️ **Proactive Background Monitoring**
+  - `/proactive [duration]` daemon thread for continuous monitoring loops and scheduled code checks.
 - 10:51 PM, Apr 04, 2026: **v3.05_fix04** — Fixed a crash on `/model` and config save commands caused by the newly introduced `_run_query_callback` being serialized to JSON; also added `SleepTimer` usage    
   guidance to the system prompt so the agent knows when to invoke background timers proactively.
 - 10:28 PM, Apr 04, 2026: **v3.05_fix03** — Added a native `SleepTimer` tool that lets the agent schedule background timers and autonomously wake itself up after a delay — no user prompt required. Paired with a `threading.Lock` to prevent output collisions when background and foreground calls overlap. Also includes cross-platform fixes: Windows ANSI color support, CRLF-aware Edit tool matching, an interactive numbered menu for `/load`, native Ollama streaming via `/api/chat`, and auto-capping `max_tokens` per provider to prevent API errors. 
@@ -172,30 +177,25 @@ Claude Code is a powerful, production-grade AI coding assistant — but its sour
 
 ---
 
-## Features
+## 🛠️ Features
 
 | Feature | Details |
 |---|---|
-| Multi-provider | Anthropic · OpenAI · Gemini · Kimi · Qwen · Zhipu · DeepSeek · Ollama · LM Studio · Custom endpoint |
-| Interactive REPL | readline history, Tab-complete slash commands |
-| Agent loop | Streaming API + automatic tool-use loop |
-| 25 built-in tools | Read · Write · Edit · Bash · Glob · Grep · WebFetch · WebSearch · **NotebookEdit** · **GetDiagnostics** · MemorySave · MemoryDelete · MemorySearch · MemoryList · Agent · SendMessage · CheckAgentResult · ListAgentTasks · ListAgentTypes · Skill · SkillList · AskUserQuestion · TaskCreate/Update/Get/List · **SleepTimer** · *(MCP + plugin tools auto-added at startup)* |
-| MCP integration | Connect any MCP server (stdio/SSE/HTTP), tools auto-registered and callable by Claude |
-| Plugin system | Install/uninstall/enable/disable/update plugins from git URLs or local paths; multi-scope (user/project); recommendation engine |
-| AskUserQuestion | Claude can pause and ask the user a clarifying question mid-task, with optional numbered choices |
-| Task management | TaskCreate/Update/Get/List tools; sequential IDs; dependency edges; metadata; persisted to `.nano_claude/tasks.json`; `/tasks` REPL command |
-| Diff view | Git-style red/green diff display for Edit and Write |
-| Context compression | Auto-compact long conversations to stay within model limits |
-| Persistent memory | Dual-scope memory (user + project) with 4 types, confidence/source metadata, conflict detection, recency-weighted search, `last_used_at` tracking, and `/memory consolidate` for auto-extraction |
-| Multi-agent | Spawn typed sub-agents (coder/reviewer/researcher/…), git worktree isolation, background mode |
-| Skills | Built-in `/commit` · `/review` + custom markdown skills with argument substitution and fork/inline execution |
-| Plugin tools | Register custom tools via `tool_registry.py` |
-| Permission system | `auto` / `accept-all` / `manual` modes |
-| 19 slash commands | `/model` · `/config` · `/save` · `/cost` · `/memory` · `/skills` · `/agents` · `/voice` · `/proactive` · … |
-| Voice input | Record → transcribe → auto-submit. Backends: `sounddevice` / `arecord` / SoX + `faster-whisper` / `openai-whisper` / OpenAI API. Works fully offline. |
-| Vision input | `/image [prompt]` captures the clipboard image and sends it to a local vision model (Ollama `llava`, `gemma4`, `llama3.2-vision`). Requires `pip install nano-claude-code[vision]`; Linux also needs `xclip`. |
-| Proactive monitoring | `/proactive [duration]` starts a background sentinel daemon; agent wakes automatically after inactivity, enabling continuous monitoring loops without user prompts |
-| Rich Live streaming | When `rich` is installed, responses render as live-updating Markdown in place — no duplicate raw text, clean tool-call interleaving |
+| 🌐 **Multi-provider** | Anthropic · OpenAI · Google · Kimi · Qwen · Zhipu · DeepSeek · Ollama · LM Studio · vLLM |
+| ⌨️ **Interactive REPL** | Readline history, Tab-complete slash commands |
+| 🔄 **Agent Loop** | Streaming API + automatic tool-use loop with smart retry logic |
+| 🧰 **25+ Built-in Tools** | Read · Write · Edit · Bash · Glob · Grep · WebFetch · **NotebookEdit** · **GetDiagnostics** · **SleepTimer** |
+| 🔌 **MCP Integration** | Connect any MCP server (stdio/SSE/HTTP) with auto-discovery |
+| 🖱️ **Plugin System** | Install plugins from git URLs; multi-scope (user/project) support |
+| ❓ **Interactive Q&A** | Claude can pause and ask clarifying questions mid-task |
+| 📋 **Task Management** | Sequential IDs, dependency edges, and persistence to `.nano_claude/` |
+| 📑 **Diff View** | Git-style colorized diffs for `Edit` and `Write` operations |
+| 🗜️ **Context Management** | Two-layer compression (Snip + AI Summarization) to stay within limits |
+| 🧠 **Persistent Memory** | Dual-scope memory (User/Project) with AI-re-ranking and consolidation |
+| 🎙️ **Voice Input** | Record → Transcribe → Auto-submit. Works 100% offline via Whisper |
+| 📷 **Native Vision** | Capture clipboard and send to local multimodal models (Ollama) |
+| 🕵️ **Proactive Bot** | Background sentinel daemon for continuous monitoring loops |
+| ⚡ **Live Rendering** | Real-time Markdown streaming with `rich.live` support |
 | Context injection | Auto-loads `CLAUDE.md`, git status, cwd, persistent memory |
 | Session persistence | Autosave on exit to `daily/YYYY-MM-DD/` (per-day limit) + `history.json` (master, all sessions) + `session_latest.json` (/resume); sessions include `session_id` and `saved_at` metadata; `/load` grouped by date |
 | Cloud sync | `/cloudsave` syncs sessions to private GitHub Gists; auto-sync on exit; load from cloud by Gist ID. No new dependencies (stdlib `urllib`). |
@@ -207,32 +207,16 @@ Claude Code is a powerful, production-grade AI coding assistant — but its sour
 
 ## Supported Models
 
-### Closed-Source (API)
+### ☁️ Closed-Source (API)
 
-| Provider | Model | Context | Strengths | API Key Env |
-|---|---|---|---|---|
-| **Anthropic** | `claude-opus-4-6` | 200k | Most capable, best for complex reasoning | `ANTHROPIC_API_KEY` |
-| **Anthropic** | `claude-sonnet-4-6` | 200k | Balanced speed & quality | `ANTHROPIC_API_KEY` |
-| **Anthropic** | `claude-haiku-4-5-20251001` | 200k | Fast, cost-efficient | `ANTHROPIC_API_KEY` |
-| **OpenAI** | `gpt-4o` | 128k | Strong multimodal & coding | `OPENAI_API_KEY` |
-| **OpenAI** | `gpt-4o-mini` | 128k | Fast, cheap | `OPENAI_API_KEY` |
-| **OpenAI** | `o3-mini` | 200k | Strong reasoning | `OPENAI_API_KEY` |
-| **OpenAI** | `o1` | 200k | Advanced reasoning | `OPENAI_API_KEY` |
-| **Google** | `gemini-2.5-pro-preview-03-25` | 1M | Long context, multimodal | `GEMINI_API_KEY` |
-| **Google** | `gemini-2.0-flash` | 1M | Fast, large context | `GEMINI_API_KEY` |
-| **Google** | `gemini-1.5-pro` | 2M | Largest context window | `GEMINI_API_KEY` |
-| **Moonshot (Kimi)** | `moonshot-v1-8k` | 8k | Chinese & English | `MOONSHOT_API_KEY` |
-| **Moonshot (Kimi)** | `moonshot-v1-32k` | 32k | Chinese & English | `MOONSHOT_API_KEY` |
-| **Moonshot (Kimi)** | `moonshot-v1-128k` | 128k | Long context | `MOONSHOT_API_KEY` |
-| **Alibaba (Qwen)** | `qwen-max` | 32k | Best Qwen quality | `DASHSCOPE_API_KEY` |
-| **Alibaba (Qwen)** | `qwen-plus` | 128k | Balanced | `DASHSCOPE_API_KEY` |
-| **Alibaba (Qwen)** | `qwen-turbo` | 1M | Fast, cheap | `DASHSCOPE_API_KEY` |
-| **Alibaba (Qwen)** | `qwq-32b` | 32k | Strong reasoning | `DASHSCOPE_API_KEY` |
-| **Zhipu (GLM)** | `glm-4-plus` | 128k | Best GLM quality | `ZHIPU_API_KEY` |
-| **Zhipu (GLM)** | `glm-4` | 128k | General purpose | `ZHIPU_API_KEY` |
-| **Zhipu (GLM)** | `glm-4-flash` | 128k | Free tier available | `ZHIPU_API_KEY` |
-| **DeepSeek** | `deepseek-chat` | 64k | Strong coding | `DEEPSEEK_API_KEY` |
-| **DeepSeek** | `deepseek-reasoner` | 64k | Chain-of-thought reasoning | `DEEPSEEK_API_KEY` |
+| Provider | Model | Context | Key Strengths |
+|---|---|---|---|
+| **Anthropic** | `claude-3-5-sonnet` | 200k | Best-in-class coding & reasoning |
+| **OpenAI** | `gpt-4o`, `o1` | 128k+ | Strong multimodal & logic |
+| **Google** | `gemini-2.0-flash` | 1M+ | Massive context window |
+| **DeepSeek** | `deepseek-reasoner` | 64k | SOTA open-weights reasoning |
+| **Kimi / Qwen** | `moonshot-v1`, `qwen-max` | 128k | Strong multi-lingual support |
+| **Zhipu** | `glm-4-plus` | 128k | Top-tier performance in Asia |
 
 ### Open-Source (Local via Ollama)
 
@@ -258,29 +242,23 @@ Claude Code is a powerful, production-grade AI coding assistant — but its sour
 
 ---
 
-## Installation
+## 📦 Installation
 
-### Recommended: install as a global command with `uv`
-
-[uv](https://docs.astral.sh/uv/) installs `nano_claude` into an isolated environment and puts it on your PATH so you can run it from anywhere:
+### 🚀 Recommended: Global install with `uv`
+[uv](https://docs.astral.sh/uv/) is the fastest way to get started. It installs `nano_claude` into an isolated environment and adds it to your PATH automatically.
 
 ```bash
 # Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone and install
-git clone <repo-url>
+git clone https://github.com/SafeRL-Lab/nano-claude-code
 cd nano-claude-code
 uv tool install .
 ```
 
-After that, `nano_claude` is available as a global command:
-
-```bash
-nano_claude                        # start REPL
-nano_claude --model gpt-4o         # choose a model
-nano_claude -p "explain this"      # non-interactive
-```
+> [!TIP]
+> After installation, you can run **`nano_claude`** from any directory! ✨
 
 To update after pulling new code:
 
@@ -294,26 +272,29 @@ To uninstall:
 uv tool uninstall nano-claude-code
 ```
 
-### Alternative: run directly from the repo
+### 🐍 Alternative: Run directly from source
+If you prefer a standard Python setup:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/SafeRL-Lab/nano-claude-code
 cd nano-claude-code
 
+# Install core dependencies
 pip install -r requirements.txt
-# or manually (sounddevice is optional — only needed for /voice):
-pip install anthropic openai httpx rich
-pip install sounddevice  # optional: voice input
 
-python nano_claude.py
+# Install optional features
+pip install ".[vision]"   # 📷 Vision support (Pillow)
+pip install ".[voice]"    # 🎙️ Voice support (whisper/sounddevice)
 ```
+
+> [!NOTE]
+> Linux users also need `xclip` for vision: `sudo apt install xclip`.
 
 ---
 
-## Usage: Closed-Source API Models
+## 📖 Usage: Closed-Source API Models
 
-### Anthropic Claude
-
+### 🗼 Anthropic Claude
 Get your API key at [console.anthropic.com](https://console.anthropic.com).
 
 ```bash
@@ -330,8 +311,7 @@ nano_claude --model claude-haiku-4-5-20251001
 nano_claude --model claude-opus-4-6 --thinking --verbose
 ```
 
-### OpenAI GPT
-
+### 🦾 OpenAI GPT
 Get your API key at [platform.openai.com](https://platform.openai.com).
 
 ```bash
@@ -343,8 +323,7 @@ nano_claude --model gpt-4.1-mini
 nano_claude --model o3-mini
 ```
 
-### Google Gemini
-
+### 🌌 Google Gemini
 Get your API key at [aistudio.google.com](https://aistudio.google.com).
 
 ```bash
@@ -621,31 +600,18 @@ nano_claude --thinking --verbose
 
 ---
 
-## Slash Commands (REPL)
+## 🕹️ Slash Commands (REPL)
 
 Type `/` and press **Tab** to autocomplete.
 
 | Command | Description |
 |---|---|
-| `/help` | Show all commands |
-| `/clear` | Clear conversation history |
-| `/model` | Show current model + list all available models |
-| `/model <name>` | Switch model (takes effect immediately) |
-| `/config` | Show all current config values |
-| `/config key=value` | Set a config value (persisted to disk) |
-| `/save` | Save session (auto-named by timestamp) |
-| `/save <filename>` | Save session to named file |
-| `/load` | Interactive list grouped by date; enter number, `1,2,3` to merge, or `H` for full history |
-| `/load <filename>` | Load a saved session by filename |
-| `/resume` | Restore the last auto-saved session (`mr_sessions/session_latest.json`) |
-| `/resume <filename>` | Load a specific file from `mr_sessions/` (or absolute path) |
-| `/history` | Print full conversation history |
-| `/context` | Show message count and token estimate |
-| `/cost` | Show token usage and estimated USD cost |
-| `/verbose` | Toggle verbose mode (tokens + thinking) |
-| `/thinking` | Toggle Extended Thinking (Claude only) |
-| `/permissions` | Show current permission mode |
-| `/permissions <mode>` | Set permission mode: `auto` / `accept-all` / `manual` |
+| 📡 **Session** | `/save`, `/load`, `/resume`, `/clear`, `/history` |
+| 🧠 **intelligence** | `/model`, `/verbose`, `/thinking`, `/context`, `/cost` |
+| 📂 **Project** | `/cwd`, `/permissions`, `/config` |
+| 🚀 **Features** | `/memory`, `/skills`, `/agents`, `/mcp`, `/voice`, `/image`, `/proactive` |
+| ☁️ **Cloud** | `/cloudsave` |
+| 🚪 **Exit** | `/exit`, `/quit` |
 | `/cwd` | Show current working directory |
 | `/cwd <path>` | Change working directory |
 | `/memory` | List all persistent memories |
