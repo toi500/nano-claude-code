@@ -329,22 +329,48 @@ def save_latest(args: str, state, _config) -> bool:
     ok(f"Session saved to {path}")
     return True
 def cmd_load(args: str, state, _config) -> bool:
-    from config import SESSIONS_DIR
+    from config import SESSIONS_DIR, MR_SESSION_DIR
+    
+    path = None
     if not args.strip():
         # List available sessions
         sessions = sorted(SESSIONS_DIR.glob("*.json"))
+        if MR_SESSION_DIR.exists():
+            sessions.extend(sorted(MR_SESSION_DIR.glob("*.json")))
+        
         if not sessions:
             info("No saved sessions found.")
-        else:
-            info("Saved sessions:")
-            for s in sessions:
-                info(f"  {s.name}")
-        return True
-    fname = args.strip()
-    path = Path(fname) if "/" in fname else SESSIONS_DIR / fname
-    if not path.exists():
-        err(f"File not found: {path}")
-        return True
+            return True
+            
+        print(clr("  Select a session to load:", "cyan", "bold"))
+        for i, s in enumerate(sessions):
+            print(clr(f"  [{i+1}] ", "yellow") + s.name)
+            
+        print()
+        ans = input(clr("  Enter number (or press Enter to cancel) > ", "cyan")).strip()
+        if not ans.isdigit():
+            info("  Cancelled.")
+            return True
+            
+        idx = int(ans) - 1
+        if idx < 0 or idx >= len(sessions):
+            err("Invalid selection.")
+            return True
+            
+        path = sessions[idx]
+        
+    if not path:
+        fname = args.strip()
+        path = Path(fname) if "/" in fname or "\\" in fname else SESSIONS_DIR / fname
+        if not path.exists() and ("/" not in fname and "\\" not in fname):
+            alt_path = MR_SESSION_DIR / fname
+            if alt_path.exists():
+                path = alt_path
+                
+        if not path.exists():
+            err(f"File not found: {path} (checked {SESSIONS_DIR} and {MR_SESSION_DIR})")
+            return True
+        
     data = json.loads(path.read_text())
     state.messages = data.get("messages", [])
     state.turn_count = data.get("turn_count", 0)
