@@ -8,7 +8,7 @@ English | [中文](https://github.com/SafeRL-Lab/clawspring/blob/main/docs/READM
   </a>
 
   
-<h2 align="center" style="font-size: 30px;"><strong><em>CheetahClaws (Nano Claude Code)</em></strong>：一个快速、易用、原生基于 Python 的任意模型个人 AI 助手，灵感来自 OpenClaw 与 Claude Code，旨在为你 24/7 自主工作</h2>
+<h2 align="center" style="font-size: 30px;"><strong><em>CheetahClaws (代码猎豹)</em></strong>：一个快速、易用、原生基于 Python 的任意模型个人 AI 助手，灵感来自 OpenClaw 与 Claude Code，旨在为你 24/7 自主工作</h2>
 <p align="center">
     <a href="https://github.com/chauncygu/collection-claude-code-source-code">Claude Code 最新源码集合</a>
     ·
